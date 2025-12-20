@@ -1,0 +1,32 @@
+return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          {!isLogged && <Route path="/*" element={<Login />} />}
+          {isLogged && !isFirstLogin && (
+            <Route path="/" element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              {modules.map((module) => {
+                return module.submodules.map((submodule) => {
+                  return (
+                    <>
+                      <Route
+                        path={submodule.routes.path}
+                        element={submodule.routes.component(
+                          submodule.permissions
+                        )}
+                      />
+                    </>
+                  );
+                });
+              })}
+              <Route path="*" element={<Home />} />
+            </Route>
+          )}
+          {isLogged && isFirstLogin && (
+            <Route path="/*" element={<NewPassword />} />
+          )}
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
