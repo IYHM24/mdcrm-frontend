@@ -46,7 +46,7 @@ export interface Task {
 export interface ApiResponse<T> {
   data: T;
   message?: string;
-  success: boolean;
+  status: boolean;
 }
 
 export interface PaginationParams {

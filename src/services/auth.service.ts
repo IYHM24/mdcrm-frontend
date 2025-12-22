@@ -13,10 +13,16 @@ interface LoginResponse {
 }
 
 export class AuthService {
+  
+  /**
+   * Login user
+   * @param credentials 
+   * @returns 
+   */
   async login(credentials: LoginCredentials): Promise<ApiResponse<LoginResponse>> {
-    const response = await apiService.post<ApiResponse<LoginResponse>>('/auth/login', credentials);
+    const response = await apiService.post<ApiResponse<LoginResponse>>('/api/auth/login', credentials);
     
-    if (response.success && response.data) {
+    if (response.status && response.data) {
       localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.data.token);
       localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(response.data.user));
     }
