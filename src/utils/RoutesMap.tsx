@@ -7,6 +7,7 @@ import UsuariosPage from "@/pages/Usuarios";
 import RolesPage from "@/pages/Roles";
 import HomePage from "@/pages/Home";
 import { Login } from "@/pages/Login";
+import NotFound from "@/pages/NotFound";
 
 //Configuracion de componente - Privadas
 const InformacionComponent = (params: any) => { return <InformacionPage {...params} /> }
@@ -16,6 +17,9 @@ const HomeComponent = (params: any) => { return <HomePage {...params} /> }
 
 //Confuiguracion de componente - Publicas
 const LoginComponent = (params: any) => { return <Login {...params} /> }
+
+//Configuracion de componente - Compartidas
+const NotFoundComponent = (params: any) => { return <NotFound {...params} /> }
 
 //Mapa de rutas - Privadas
 export const RoutesMap: RouteMapType[] = [
@@ -57,6 +61,17 @@ export const PublicRoutesMap: RouteMapType[] = [
         route: {
             path: '/',
             component: LoginComponent,
+        },
+    }
+]
+
+//Mapa de rutas - compartidas
+export const SharedRoutesMap: RouteMapType[] = [
+    {
+        module: 'not_found',
+        route: {
+            path: '/*',
+            component: NotFoundComponent,
         },
     }
 ]

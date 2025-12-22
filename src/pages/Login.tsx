@@ -21,14 +21,13 @@ export const Login = () => {
   /*  */
   const handleSubmit = async (e: FormEvent) => {
 
-    debugger;
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
       await login(email, password);
-      // Redirect will be handled by auth context
+      window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
     } finally {
@@ -98,14 +97,14 @@ export const Login = () => {
 
           {/* Footer */}
           <footer className='text-center text-gray-600'>
-            <h3 className='font-bold text-md'>Desarrollado con el ❤️ por Ancom</h3>
+            <h3 className='font-bold text-md'>Desarrollado con el 💙 por Ancom</h3>
             <span className='text-sm'>Copyright © {new Date().getFullYear()}</span>
           </footer>
 
         </div>
       </div>
       <div
-        className="hidden bg-muted lg:block"
+        className="hidden bg-muted lg:block dark:bg-muted"
         style={{
           backgroundImage: `url(${hero})`,
           backgroundSize: 'cover',
