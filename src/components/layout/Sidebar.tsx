@@ -1,37 +1,161 @@
-import type { ReactNode } from 'react';
+import { useState } from 'react';
+import { RoutesMap } from '@/utils/RoutesMap';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  ChevronRight,
+} from 'lucide-react';
 
-interface NavItem {
-  name: string;
-  href: string;
-  icon?: ReactNode;
-}
+//
 
-const navItems: NavItem[] = [
-  { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Clientes', href: '/customers' },
-  { name: 'Leads', href: '/leads' },
-  { name: 'Tareas', href: '/tasks' },
-  { name: 'Reportes', href: '/reports' },
-  { name: 'Configuración', href: '/settings' },
-];
+//
+const TAMANO_ICONO = 20;
 
 export const Sidebar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+
+  const toggleExpanded = (itemName: string) => {
+    setExpandedItems(prev =>
+      prev.includes(itemName)
+        ? prev.filter(item => item !== itemName)
+        : [...prev, itemName]
+    );
+  };
+
   return (
-    <aside className="w-64 bg-gray-800 min-h-screen">
-      <nav className="mt-5 px-2">
-        <div className="space-y-1">
-          {navItems.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
-            >
-              {item.icon && <span className="mr-3">{item.icon}</span>}
-              {item.name}
-            </a>
-          ))}
+    <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 min-h-screen transition-all duration-300 ease-in-out flex flex-col`}>
+      {/* Header */}
+      <div className="p-6 border-b border-brand-400/20 dark:border-brand-dark-600">
+        <div className="flex items-center justify-between">
+          {!isCollapsed && (
+            <Link to="/">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                  <span className="text-brand-900  font-bold text-lg">MD</span>
+                </div>
+                <span className="text-white font-semibold text-xl">Sollution</span>
+              </div>
+            </Link>
+          )}
+          <button
+            onClick={toggleSidebar}
+            className="text-white/70 dark:text-brand-dark-400 hover:text-white dark:hover:text-brand-dark-200 transition-colors p-1 rounded"
+          >
+            {isCollapsed ? <ArrowRight size={16} /> : <ArrowLeft size={16} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-4 py-6">
+        <div className="space-y-2">
+          {RoutesMap.map((item) => {
+            const isExpanded = expandedItems.includes(item.module);
+            const hasSubItems = item.subroutes && item.subroutes.length > 0;
+
+            return item.route?.path === "/" ? <></> : (
+              <div key={"item-" + item.module}>
+                {/* Main Item */}
+                {item.route ? (
+                  <a
+                    href={item.route.path}
+                    className={`
+                      group flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative
+                      ${item.active
+                        ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-400 shadow-lg backdrop-blur-sm'
+                        : 'text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
+                      }
+                    `}
+                    title={isCollapsed ? item.module : ''}
+                  >
+                    <span className="flex-shrink-0">
+                      {item.icon && item.icon({ size: TAMANO_ICONO })}
+                    </span>
+                    {!isCollapsed && (
+                      <span className="ml-3 truncate">{item.module}</span>
+                    )}
+                    {item.active && (
+                      <div className={`${isCollapsed ? 'absolute -right-1 top-1/2 -translate-y-1/2' : 'ml-auto'}`}>
+                        <div className="w-1 h-1 bg-brand-500 dark:bg-brand-400 rounded-full"></div>
+                      </div>
+                    )}
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => hasSubItems && !isCollapsed && toggleExpanded(item.module)}
+                    className={`
+                      w-full group flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative
+                      text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50
+                    `}
+                    title={isCollapsed ? item.module : ''}
+                  >
+                    <span className="flex-shrink-0">
+                      {item.icon && item.icon({ size: TAMANO_ICONO })}
+                    </span>
+                    {!isCollapsed && (
+                      <>
+                        <span className="ml-3 truncate flex-1 text-left">{item.module}</span>
+                        {hasSubItems && (
+                          <span className="ml-auto">
+                            {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </button>
+                )}
+
+                {/* Sub Items */}
+                {hasSubItems && isExpanded && !isCollapsed && (
+                  <div className="mt-1 ml-8 space-y-1">
+                    {item.subroutes!.map((subItem, index) => (
+                      <a
+                        key={index}
+                        href={subItem.route.path}
+                        className={`
+                          group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200
+                          ${subItem.active
+                            ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-400 shadow-lg backdrop-blur-sm'
+                            : 'text-white/70 dark:text-brand-dark-400 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
+                          }
+                        `}
+                      >
+                        {subItem.icon && (
+                          <span className="flex-shrink-0 mr-2">
+                            {subItem.icon({ size: 16 })}
+                          </span>
+                        )}
+                        <span className="truncate">{subItem.module}</span>
+                        {subItem.active && (
+                          <div className="ml-auto">
+                            <div className="w-1 h-1 bg-brand-500 dark:bg-brand-400 rounded-full"></div>
+                          </div>
+                        )}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </nav>
+
+      {/* Footer */}
+      {!isCollapsed && (
+        <div className="p-4 border-t border-brand-400/20 dark:border-brand-dark-600">
+          <div className="text-white/60 dark:text-brand-dark-400 text-xs text-center">
+            <h2 className='font-bold'>Ancom </h2>
+            <p className="mb-1">Todos los derechos reservados</p>
+            <p>{new Date().getFullYear()}</p>
+          </div>
+        </div>
+      )}
     </aside>
   );
 };

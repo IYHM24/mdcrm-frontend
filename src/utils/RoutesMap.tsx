@@ -1,5 +1,6 @@
 //Importacion de tipos
 import type { RouteMapType } from "@/types";
+import type { LucideProps } from "lucide-react";
 
 //Importacion de paginas
 import InformacionPage from "@/pages/Informacion";
@@ -8,6 +9,7 @@ import RolesPage from "@/pages/Roles";
 import HomePage from "@/pages/Home";
 import { Login } from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
+import { LayoutDashboard, Users, Key } from "lucide-react";
 
 //Configuracion de componente - Privadas
 const InformacionComponent = (params: any) => { return <InformacionPage {...params} /> }
@@ -15,13 +17,19 @@ const UsuariosComponent = (params: any) => { return <UsuariosPage {...params} />
 const RolesComponent = (params: any) => { return <RolesPage {...params} /> }
 const HomeComponent = (params: any) => { return <HomePage {...params} /> }
 
+//Configuracion de iconos - privadas
+const InformacionIcon = (params: LucideProps) => { return <LayoutDashboard {...params} /> }
+const UsuariosIcon = (params: LucideProps) => { return <Users {...params} /> }
+const RolesIcon = (params: LucideProps) => { return <Key {...params} /> }
+
+
 //Confuiguracion de componente - Publicas
 const LoginComponent = (params: any) => { return <Login {...params} /> }
 
 //Configuracion de componente - Compartidas
 const NotFoundComponent = (params: any) => { return <NotFound {...params} /> }
 
-//Mapa de rutas - Privadas
+//Mapa de rutas - Privadas (CRM)
 export const RoutesMap: RouteMapType[] = [
     {
         module: 'home',
@@ -32,14 +40,15 @@ export const RoutesMap: RouteMapType[] = [
     },
     {
         module: 'informacion',
+        icon: InformacionIcon,
         route: {
             path: '/informacion',
             component: InformacionComponent,
         },
-
     },
     {
         module: 'usuarios',
+        icon: UsuariosIcon,
         route: {
             path: '/usuarios',
             component: UsuariosComponent,
@@ -47,6 +56,7 @@ export const RoutesMap: RouteMapType[] = [
     },
     {
         module: 'roles',
+        icon: RolesIcon,
         route: {
             path: '/roles',
             component: RolesComponent,

@@ -6,7 +6,7 @@ interface RouteGeneratorProps {
 }
 
 /**
- * Inyector de rutas
+ * Inyector de rutas - React router v6
  * @param param0 
  * @returns 
  */

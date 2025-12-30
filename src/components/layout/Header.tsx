@@ -30,39 +30,46 @@ export const Header = () => {
     }
   };
 
-  const logoutHandle = () => {
-    logout();
+  const logoutHandle = async () => {
+    await logout();
     window.location.reload();
   }
 
   return (
-    <header className="bg-background shadow-sm border-b border-border transition-colors duration-300">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-end items-center h-16">
+    <header className="bg-background shadow-sm border-b border border-border transition-colors duration-300 bg-white dark:bg-black">
+      <div className="mx-auto px-6">
+        <div className="flex justify-end items-center h-20">
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             {user && (
               <>
                 <div className='relative group'>
 
-                  {/* User */}
-                  <div className='rounded-full border p-2 hover:transition-shadow hover:shadow-lg cursor-pointer'>
-                    {/* Validar si se tiene el avatar */}
-                    {
-                      user.avatar ? (
-                        <div
-                          style={{
-                            backgroundImage: `url(${user.avatar})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                          }}
-                          className="w-10 h-10 rounded-full"
-                        ></div>
-                      ) : (
-                        <LiaUser size={30} className="text-black-600" />
-                      )
-                    }
+                  {/* User icon*/}
+                  <div className='flex gap-4'>
+                    <div className='rounded-full border p-3 hover:transition-shadow hover:shadow-lg cursor-pointer border-border'>
+                      {/* Validar si se tiene el avatar */}
+                      {
+                        user.avatar ? (
+                          <div
+                            style={{
+                              backgroundImage: `url(${user.avatar})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                            }}
+                            className="w-12 h-12 rounded-full"
+                          ></div>
+                        ) : (
+                          <LiaUser size={32} className="text-black-600" />
+                        )
+                      }
+                    </div>
+                    <div className='flex flex-col justify-center'>
+                      <span className="font-medium text-card-foreground text-lg">{user.name}</span>
+                      <span className="font-light text-card-foreground text-base">{user.role}</span>
+                    </div>
                   </div>
+
 
                   {/* Dropdown menu */}
                   <div className="absolute right-0 top-full mt-2 w-56 bg-card rounded-md shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out z-50">

@@ -8,7 +8,7 @@ export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    
+
     // Load user on mount
     const loadUser = async () => {
       try {
@@ -43,9 +43,15 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    await authService.logout();
-    setUser(null);
-    setIsAuthenticated(false);
+    try {
+      const response = await authService.logout();
+      setUser(null);
+      setIsAuthenticated(false);
+      throw new Error(response.message || 'Logout failed');
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
   };
 
   return {
@@ -55,5 +61,5 @@ export const useAuth = () => {
     login,
     logout,
   };
-  
+
 };

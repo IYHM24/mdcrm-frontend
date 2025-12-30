@@ -1,17 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useAuthContext } from '@/context/AuthContext';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { HiMoon, HiSun } from "react-icons/hi";
 
 export const Login = () => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const { login } = useAuthContext();
+
+  useEffect(() => {
+    // Check if dark mode is enabled on mount
+    const darkMode = localStorage.getItem('darkMode') === 'true' ||
+      (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setIsDarkMode(darkMode);
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode.toString());
+
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
 
   /*  */
 
@@ -36,21 +59,33 @@ export const Login = () => {
   };
 
   return (
-    <div className="w-screen h-screen lg:grid lg:grid-cols-2 shadow-lg">
-      <div
-        className="flex items-center justify-center py-12 lg:rounded-l-2xl max-sm:rounded-2xl"
-      >
+    <div className="w-screen h-screen lg:grid lg:grid-cols-2 shadow-lg bg-background">
+      <div className="flex items-center justify-center py-12 lg:rounded-l-2xl max-sm:rounded-2xl relative">
+        {/* Dark Mode Toggle Button */}
+        <button
+          onClick={toggleDarkMode}
+          className="absolute top-4 right-4 p-2 rounded-md hover:bg-accent transition-colors duration-200"
+          aria-label="Toggle dark mode"
+          title={isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+        >
+          {isDarkMode ? (
+            <HiSun className="h-5 w-5 text-foreground" />
+          ) : (
+            <HiMoon className="h-5 w-5 text-foreground" />
+          )}
+        </button>
+
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Iniciar sesión</h1>
-            <p className="text-balance text-muted-foreground text-gray-600">
+            <h1 className="text-3xl font-bold text-foreground">Iniciar sesión</h1>
+            <p className="text-balance text-muted-foreground">
               Ingresa al sistema con tus credenciales
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-4">
             {error && (
-              <div className="bg-red-50 border !border-red-200 text-red-700 px-4 py-3 rounded">
+              <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded">
                 {error}
               </div>
             )}
@@ -96,7 +131,7 @@ export const Login = () => {
           </div>
 
           {/* Footer */}
-          <footer className='text-center text-gray-600'>
+          <footer className='text-center text-muted-foreground'>
             <h3 className='font-bold text-md'>Desarrollado con el 💙 por Ancom</h3>
             <span className='text-sm'>Copyright © {new Date().getFullYear()}</span>
           </footer>
@@ -104,7 +139,7 @@ export const Login = () => {
         </div>
       </div>
       <div
-        className="hidden bg-muted lg:block dark:bg-muted"
+        className="hidden bg-muted lg:block"
         style={{
           backgroundImage: `url(${hero})`,
           backgroundSize: 'cover',

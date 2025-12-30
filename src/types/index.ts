@@ -62,22 +62,24 @@ export interface PaginatedResponse<T> {
 }
 
 
-export interface RouteType{
+export interface RouteType {
   path: string;
   component: (params: any) => JSX.Element;
 }
 
 export interface SubRouteMapType {
-  icon?: string;
+  icon?: (params: any) => JSX.Element;
   module: string;
   route: RouteType;
+  active?: boolean;
 }
 
 
 export interface RouteMapType {
-  icon?: string;
+  icon?: (params: any) => JSX.Element;
   module: string;
   route?: RouteType;
   subroutes?: SubRouteMapType[];
+  active?: boolean;
 }
 
