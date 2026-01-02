@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RoutesMap } from '@/utils/RoutesMap';
 import { Link } from 'react-router-dom';
 import {
@@ -7,6 +7,7 @@ import {
   ChevronFirst,
   ChevronRight,
 } from 'lucide-react';
+import type { RouteMapType } from '@/types';
 
 //
 
@@ -14,8 +15,15 @@ import {
 const TAMANO_ICONO = 20;
 
 export const Sidebar = () => {
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const [activeRoute, setActiveRoute] = useState<string>('');
+
+  useEffect(() => {
+    //Set initial active route based on current URL
+    setActiveRoute(window.location.pathname);
+  }, []);
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
@@ -27,6 +35,11 @@ export const Sidebar = () => {
     );
   };
 
+  const activeItem = (item: RouteMapType | undefined = undefined) => {
+    item !== undefined ? setActiveRoute(item.route ? item.route.path : '/')
+      : setActiveRoute('/');;
+  }
+
   return (
     <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 dark:bg-zinc-800 transition-all duration-300 ease-in-out flex flex-col h-screen overflow-hidden`}>
       {/* Header */}
@@ -35,7 +48,7 @@ export const Sidebar = () => {
 
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <Link to="/">
+            <Link to="/" onClick={() => activeItem()}>
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <span className="text-brand-900  font-bold text-lg">MD</span>
@@ -67,9 +80,10 @@ export const Sidebar = () => {
                 {item.route ? (
                   <a
                     href={item.route.path}
+                    onClick={() => { activeItem(item) }}
                     className={`
                       group flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative
-                      ${item.active
+                      ${activeRoute === item.route.path
                         ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-400 shadow-lg backdrop-blur-sm'
                         : 'text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
                       }
@@ -118,6 +132,7 @@ export const Sidebar = () => {
                   <div className="mt-1 ml-8 space-y-1">
                     {item.subroutes!.map((subItem, index) => (
                       <a
+                        onClick={() => { activeItem(item) }}
                         key={index}
                         href={subItem.route.path}
                         className={`

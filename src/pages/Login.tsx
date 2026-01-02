@@ -61,6 +61,16 @@ export const Login = () => {
   return (
     <div className="w-screen h-screen lg:grid lg:grid-cols-2 shadow-lg bg-background">
       <div className="flex items-center justify-center py-12 lg:rounded-l-2xl max-sm:rounded-2xl relative">
+
+        {/* MD Logo */}
+        <div className='absolute top-4 left-4 flex gap-2 items-center'>
+          <span className="text-white  font-bold text-lg  w-8 h-8 bg-brand-800  rounded-lg flex items-center justify-center">MD</span>
+          <span className="text-brand-800 dark:text-white font-semibold text-xl">Sollution</span>
+        </div>
+        <div className="">
+
+        </div>
+
         {/* Dark Mode Toggle Button */}
         <button
           onClick={toggleDarkMode}
@@ -74,6 +84,7 @@ export const Login = () => {
             <HiMoon className="h-5 w-5 text-foreground" />
           )}
         </button>
+
 
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">

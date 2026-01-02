@@ -8,8 +8,10 @@ interface LoginCredentials {
 }
 
 interface LoginResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: User;
+  roles: string[];
 }
 
 interface LogoutResponse {
@@ -30,9 +32,10 @@ export class AuthService {
    */
   async login(credentials: LoginCredentials): Promise<ApiResponse<LoginResponse>> {
     const response = await apiService.post<ApiResponse<LoginResponse>>('/api/auth/login', credentials);
-    debugger;
+
     if (response.status && response.data) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.data.token);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.data.accessToken);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken); // Example storage
       localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(response.data.user));
     }
 
@@ -47,8 +50,7 @@ export class AuthService {
       console.log('📤 Making logout API call to /api/auth/logout');
       console.log('🌐 Full URL would be:', `${API_BASE_URL}/api/auth/logout`);
 
-      debugger; // Breakpoint para depuración - PARA AQUÍ
-
+      params.RefreshToken = localStorage.getItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN) || undefined;
       const response = await apiService.post<ApiResponse<LogoutResponse>>('/api/auth/logout', params);
 
       console.log('✅ Logout API response received:', response);

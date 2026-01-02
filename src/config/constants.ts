@@ -16,6 +16,7 @@ export const ROUTES = {
 
 export const LOCAL_STORAGE_KEYS = {
   AUTH_TOKEN: 'crm_auth_token',
+  REFRESH_TOKEN: 'crm_refresh_token',
   USER_DATA: 'crm_user_data',
   THEME: 'crm_theme',
 } as const;

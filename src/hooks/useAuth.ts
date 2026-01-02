@@ -47,7 +47,7 @@ export const useAuth = () => {
       const response = await authService.logout();
       setUser(null);
       setIsAuthenticated(false);
-      throw new Error(response.message || 'Logout failed');
+      return response;
     } catch (error) {
       console.error('Logout error:', error);
       throw error;

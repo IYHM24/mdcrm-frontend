@@ -3,10 +3,12 @@ import { LiaUser } from "react-icons/lia";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
   const { user, logout } = useAuthContext();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if dark mode is enabled on mount
@@ -38,7 +40,7 @@ export const Header = () => {
   return (
     <header className={
       `
-        bg-white/60 dark:bg-zinc-800/60 backdrop-blur-md backdrop-saturate-150 backdrop-brightness-110 shadow-lg border-b border-white/20 dark:border-zinc-700/20 transition-all duration-300
+        bg-white/60 dark:bg-zinc-800/60 backdrop-blur-md backdrop-saturate-150 backdrop-brightness-110 shadow-lg border-b border-white/20 dark:border-zinc-700/20
         m-2 rounded-2xl 
       `
     }
@@ -52,8 +54,8 @@ export const Header = () => {
                 <div className='relative group'>
 
                   {/* User icon*/}
-                  <div className='flex gap-4'>
-                    <div className='rounded-full border-2 border-white/30 dark:border-zinc-700/50 bg-white/20 dark:bg-zinc-800/20 backdrop-blur-sm p-3 hover:bg-white/30 dark:hover:bg-zinc-800/30 hover:shadow-lg transition-all duration-300 cursor-pointer'>
+                  <div className='flex gap-4 group'>
+                    <div className='rounded-full border-2 border-white/30 dark:border-zinc-700/50 bg-white/20 dark:bg-zinc-800/20 backdrop-blur-sm p-3 group-hover:!bg-white/30 dark:!group-hover:bg-zinc-800/30 group-hover:shadow-lg cursor-pointer'>
                       {/* Validar si se tiene el avatar */}
                       {
                         user.avatar ? (
@@ -71,17 +73,18 @@ export const Header = () => {
                       }
                     </div>
                     <div className='flex flex-col justify-center'>
-                      <span className="font-medium text-card-foreground text-lg">{user.name}</span>
-                      <span className="font-light text-card-foreground text-base">{user.role}</span>
+                      <span className="font-medium text-card-foreground text-md">Sandra Ortiz</span>
+                      <span className="font-light text-card-foreground text-sm">Administradora</span>
                     </div>
                   </div>
 
 
                   {/* Dropdown menu */}
                   <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-zinc-900 backdrop-blur-md backdrop-saturate-120 rounded-md shadow-xl border border-white/30 dark:border-zinc-700/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out z-50">
+
                     <div className="p-3 border-b border-white/20 dark:border-zinc-700/30">
-                      <p className="text-sm font-medium text-card-foreground">{user.name}</p>
-                      <p className="text-xs text-muted-foreground">{user.role}</p>
+                      <p className="text-sm font-medium text-card-foreground">Sandra</p>
+                      <p className="text-xs text-muted-foreground">Ortiz</p>
                     </div>
 
                     {/* Dark Mode Toggle */}

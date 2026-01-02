@@ -2,8 +2,11 @@ import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Users, DollarSign, TrendingUp, Calendar, Plus, Phone, Mail, FileText, Clock, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { useClock } from '@/hooks'
 
 const HomePage: React.FC = () => {
+
+  const { formattedTime } = useClock({ format: 'datetime', updateInterval: 60000 })
 
   // Datos de ejemplo - en producción vendrían de una API
   const stats = [
@@ -139,14 +142,20 @@ const HomePage: React.FC = () => {
           </p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-muted-foreground">
-            {new Date().toLocaleDateString('es-ES', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </p>
+          {typeof formattedTime === 'object' ? (
+            <>
+              <p className="text-sm text-muted-foreground">
+                {formattedTime.date}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {formattedTime.time}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              {formattedTime}
+            </p>
+          )}
         </div>
       </div>
 
