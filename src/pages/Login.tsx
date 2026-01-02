@@ -116,7 +116,7 @@ export const Login = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading} >
+            <Button type="submit" className="w-full bg-brand-800 hover:bg-brand-900" disabled={isLoading} >
               {isLoading ? 'Loading...' : 'Login'}
             </Button>
 
