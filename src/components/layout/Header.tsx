@@ -36,7 +36,7 @@ export const Header = () => {
   }
 
   return (
-    <header className="bg-background shadow-sm border-b border border-border transition-colors duration-300 bg-white dark:bg-black">
+    <header className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-sm border-b border-white/20 dark:border-zinc-700/50 transition-colors duration-300">
       <div className="mx-auto px-6">
         <div className="flex justify-end items-center h-20">
 
@@ -72,7 +72,7 @@ export const Header = () => {
 
 
                   {/* Dropdown menu */}
-                  <div className="absolute right-0 top-full mt-2 w-56 bg-card rounded-md shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out z-50">
+                  <div className="absolute right-0 top-full mt-2 w-56 dark:bg-zinc-900 bg-white rounded-md shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out z-50">
                     <div className="p-3 border-b border-border">
                       <p className="text-sm font-medium text-card-foreground">{user.name}</p>
                       <p className="text-xs text-muted-foreground">{user.role}</p>

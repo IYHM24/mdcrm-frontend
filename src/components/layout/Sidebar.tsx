@@ -4,7 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
+  ChartNoAxesColumn,
   ChevronDown,
+  ChevronFirst,
   ChevronRight,
 } from 'lucide-react';
 
@@ -28,9 +30,11 @@ export const Sidebar = () => {
   };
 
   return (
-    <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 min-h-screen transition-all duration-300 ease-in-out flex flex-col`}>
+    <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 transition-all duration-300 ease-in-out flex flex-col h-screen overflow-hidden`}>
       {/* Header */}
-      <div className="p-6 border-b border-brand-400/20 dark:border-brand-dark-600">
+
+      <div className="p-6">
+
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <Link to="/">
@@ -46,13 +50,14 @@ export const Sidebar = () => {
             onClick={toggleSidebar}
             className="text-white/70 dark:text-brand-dark-400 hover:text-white dark:hover:text-brand-dark-200 transition-colors p-1 rounded"
           >
-            {isCollapsed ? <ArrowRight size={16} /> : <ArrowLeft size={16} />}
+            {isCollapsed ? <ChartNoAxesColumn size={16} className="rotate-90" /> : <ChevronFirst size={16} />}
           </button>
         </div>
+
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-6">
+      <nav className="flex-1 px-4 py-6 min-h-44 overflow-y-auto scrollbar-hide">
         <div className="space-y-2">
           {RoutesMap.map((item) => {
             const isExpanded = expandedItems.includes(item.module);
@@ -155,6 +160,7 @@ export const Sidebar = () => {
             <p>{new Date().getFullYear()}</p>
           </div>
         </div>
+
       )}
     </aside>
   );
