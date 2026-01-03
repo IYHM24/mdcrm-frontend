@@ -25,7 +25,6 @@ export const Login = () => {
   }, []);
 
   useEffect(() => {
-    debugger;
     if (user != null && roles != null) {
       window.location.reload();
     }

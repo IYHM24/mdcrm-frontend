@@ -4,7 +4,7 @@ import { LiaUser } from "react-icons/lia";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Pen } from 'lucide-react';
-import { useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 
 export const Header = () => {
 
