@@ -86,3 +86,6 @@ export interface RouteMapType {
   active?: boolean;
 }
 
+// Theme types
+export type Theme = 'light' | 'dark' | 'system';
+

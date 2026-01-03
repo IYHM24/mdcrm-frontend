@@ -1,44 +1,21 @@
 import { useAuthContext } from '@/context/AuthContext';
+import { useThemeContext } from '@/context/ThemeContext';
 import { LiaUser } from "react-icons/lia";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Pen } from 'lucide-react';
 
 export const Header = () => {
 
   const { user, logout, roles } = useAuthContext();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check if dark mode is enabled on mount
-    const darkMode = localStorage.getItem('darkMode') === 'true' ||
-      (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    setIsDarkMode(darkMode);
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    }
-
-  }, []);
+  const { isDarkMode, toggleDarkMode } = useThemeContext();
 
   useEffect(() => {
     if (user != null || roles != null) {
       debugger;
     }
   }, [user, roles]);
-
-
-  const toggleDarkMode = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    localStorage.setItem('darkMode', newDarkMode.toString());
-
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
 
   const logoutHandle = async () => {
     await logout();

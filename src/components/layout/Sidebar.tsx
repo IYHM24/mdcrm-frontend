@@ -41,7 +41,7 @@ export const Sidebar = () => {
   }
 
   return (
-    <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 dark:bg-zinc-800 transition-all duration-300 ease-in-out flex flex-col h-screen overflow-hidden`}>
+    <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 dark:bg-zinc-800 flex flex-col h-screen overflow-hidden`}>
       {/* Header */}
 
       <div className="p-6">
