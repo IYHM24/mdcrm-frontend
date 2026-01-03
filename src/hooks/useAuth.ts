@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { authService } from '@/services/auth.service';
 import type { User } from '@/types';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [roles, setRoles] = useState<string[] | null>(null);
+  const userRef = useRef<User | null>(null);
+  const rolesRef = useRef<string[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -15,13 +15,17 @@ export const useAuth = () => {
       try {
         const currentUser = await authService.getCurrentUser();
         const currentRoles = await authService.getUserRoles();
-        setUser(currentUser);
-        setRoles(currentRoles);
+
+        // Actualizar refs sin causar re-renders
+        userRef.current = currentUser;
+        rolesRef.current = currentRoles;
+
+        // Solo este estado causa re-render
         setIsAuthenticated(!!currentUser);
       } catch (error) {
         console.error('Error loading user:', error);
-        setUser(null);
-        setRoles(null);
+        userRef.current = null;
+        rolesRef.current = null;
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
@@ -31,12 +35,15 @@ export const useAuth = () => {
     loadUser();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     try {
       const response = await authService.login({ email, password });
       if (response.status && response.data) {
-        setUser(response.data.user);
-        setRoles(response.data.roles);
+        // Actualizar refs sin re-render
+        userRef.current = response.data.user;
+        rolesRef.current = response.data.roles;
+
+        // Solo este estado causa re-render
         setIsAuthenticated(true);
         return response;
       }
@@ -45,26 +52,30 @@ export const useAuth = () => {
       console.error('Login error:', error);
       throw error;
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       const response = await authService.logout();
-      setUser(null);
-      setRoles(null);
+
+      // Limpiar refs sin re-render
+      userRef.current = null;
+      rolesRef.current = null;
+
+      // Solo este estado causa re-render
       setIsAuthenticated(false);
       return response;
     } catch (error) {
       console.error('Logout error:', error);
       throw error;
     }
-  };
+  }, []);
 
   return {
-    user,
+    user: userRef.current,
     loading,
     isAuthenticated,
-    roles,
+    roles: rolesRef.current,
     login,
     logout,
   };

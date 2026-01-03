@@ -3,24 +3,62 @@ import { useThemeContext } from '@/context/ThemeContext';
 import { LiaUser } from "react-icons/lia";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useEffect } from 'react';
 import { Pen } from 'lucide-react';
+import { useEffect, useMemo, useCallback } from 'react';
 
 export const Header = () => {
 
   const { user, logout, roles } = useAuthContext();
   const { isDarkMode, toggleDarkMode } = useThemeContext();
 
-  useEffect(() => {
-    if (user != null || roles != null) {
-      debugger;
-    }
-  }, [user, roles]);
-
-  const logoutHandle = async () => {
+  // Memoizar el manejo de logout para evitar re-renders
+  const logoutHandle = useCallback(async () => {
     await logout();
     window.location.reload();
-  }
+  }, [logout]);
+
+  // Memoizar la información del usuario para evitar re-renders
+  const userInfo = useMemo(() => {
+    if (!user) return null;
+
+    return {
+      firstName: user.firstName,
+      fullName: `${user.firstName} ${user.lastName}`,
+      avatar: user.avatar,
+      rolesText: roles != null ? roles.join(', ') : ''
+    };
+  }, [user?.firstName, user?.lastName, user?.avatar, roles]);
+
+  // Memoizar el avatar del usuario
+  const userAvatar = useMemo(() => {
+    if (!userInfo?.avatar) {
+      return (
+        <div className='m-3'>
+          <LiaUser size={32} className="text-black-600" />
+        </div>
+      );
+    }
+
+    return (
+      <div
+        style={{
+          backgroundImage: `url(${userInfo.avatar})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+        className="w-12 h-12 rounded-full"
+      />
+    );
+  }, [userInfo?.avatar]);
+
+  // Memoizar el icono de tema
+  const themeIcon = useMemo(() => {
+    return isDarkMode ? (
+      <HiMoon className="h-4 w-4 text-muted-foreground" />
+    ) : (
+      <HiSun className="h-4 w-4 text-muted-foreground" />
+    );
+  }, [isDarkMode]);
 
   return (
     <header className={
@@ -41,27 +79,11 @@ export const Header = () => {
                   {/* User icon*/}
                   <div className='flex gap-4 group'>
                     <div className='rounded-full border-2 border-white/30 dark:border-zinc-700/50 bg-white/20 dark:bg-zinc-800/20 backdrop-blur-sm group-hover:!bg-white/30 dark:!group-hover:bg-zinc-800/30 group-hover:shadow-lg cursor-pointer'>
-                      {/* Validar si se tiene el avatar */}
-                      {
-                        user.avatar ? (
-                          <div
-                            style={{
-                              backgroundImage: `url(${user.avatar})`,
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center',
-                            }}
-                            className="w-12 h-12 rounded-full"
-                          ></div>
-                        ) : (
-                          <div className='m-3'>
-                            <LiaUser size={32} className="text-black-600" />
-                          </div>
-                        )
-                      }
+                      {userAvatar}
                     </div>
                     <div className='flex flex-col justify-center'>
-                      <span className="font-bold text-card-foreground text-sm">{user.firstName} {user.lastName}</span>
-                      <span className="font-light text-card-foreground text-xs">{roles != null ? roles.join(', ') : ''}</span>
+                      <span className="font-bold text-card-foreground text-sm">{userInfo?.firstName}</span>
+                      <span className="font-light text-card-foreground text-xs">{userInfo?.rolesText}</span>
                     </div>
                   </div>
 
@@ -71,22 +93,18 @@ export const Header = () => {
 
                     {/* Rol y nombre */}
                     <div className="p-3 border-b border-white/20 dark:border-zinc-700/30">
-                      <p className="text-sm font-bold text-card-foreground">{user.firstName} {user.lastName}</p>
-                      <p className="text-xs text-muted-foreground !font-light">{roles != null ? roles.join(', ') : ''}</p>
+                      <p className="text-sm font-bold text-card-foreground">{userInfo?.fullName}</p>
+                      <p className="text-xs text-muted-foreground !font-light">{userInfo?.rolesText}</p>
                     </div>
 
                     {/* Dark Mode Toggle */}
                     <div className="p-2">
-                      <button
-                        className="flex items-center justify-between w-full text-left px-3 py-2 text-sm text-card-foreground hover:bg-gray-100 dark:hover:bg-zinc-800/50 rounded-md transition-colors duration-150"
+                      <div
+                        className="flex items-center justify-between w-full text-left px-3 py-2 text-sm text-card-foreground hover:bg-gray-100 dark:hover:bg-zinc-800/50 rounded-md transition-colors duration-150 cursor-pointer"
                         onClick={toggleDarkMode}
                       >
                         <div className="flex items-center space-x-2">
-                          {isDarkMode ? (
-                            <HiMoon className="h-4 w-4 text-muted-foreground" />
-                          ) : (
-                            <HiSun className="h-4 w-4 text-muted-foreground" />
-                          )}
+                          {themeIcon}
                           <span className="text-sm text-card-foreground">
                             {isDarkMode ? 'Modo oscuro' : 'Modo claro'}
                           </span>
@@ -95,7 +113,7 @@ export const Header = () => {
                           checked={isDarkMode}
                           onCheckedChange={toggleDarkMode}
                         />
-                      </button>
+                      </div>
                     </div>
 
                     {/* Editar perfil */}

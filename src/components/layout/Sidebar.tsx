@@ -74,8 +74,8 @@ export const Sidebar = () => {
             const isExpanded = expandedItems.includes(item.module);
             const hasSubItems = item.subroutes && item.subroutes.length > 0;
 
-            return item.route?.path === "/" ? <></> : (
-              <div key={"item-" + item.module}>
+            return item.route?.path === "/" ? null : (
+              <div key={item.module}>
                 {/* Main Item */}
                 {item.route ? (
                   <a
@@ -84,7 +84,7 @@ export const Sidebar = () => {
                     className={`
                       group flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative
                       ${activeRoute === item.route.path
-                        ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-400 shadow-lg backdrop-blur-sm'
+                        ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-200 shadow-lg backdrop-blur-sm'
                         : 'text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
                       }
                     `}
