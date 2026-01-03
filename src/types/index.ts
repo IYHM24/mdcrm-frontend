@@ -2,11 +2,14 @@ import type { JSX } from "react";
 
 // Common types
 export interface User {
-  id: string;
-  name: string;
+  Id: string;
+  firstName: string;
+  lastName: string;
+  documentNumber: string;
   email: string;
-  role: 'admin' | 'manager' | 'agent';
-  avatar?: string;
+  isActive: boolean;
+  role: string;
+  avatar: string;
 }
 
 export interface Customer {

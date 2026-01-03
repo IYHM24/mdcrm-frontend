@@ -5,6 +5,7 @@ import type { User } from '@/types';
 
 interface AuthContextType {
   user: User | null;
+  roles: string[] | null;
   loading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<unknown>;

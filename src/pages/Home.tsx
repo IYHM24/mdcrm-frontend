@@ -3,10 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Users, DollarSign, TrendingUp, Calendar, Plus, Phone, Mail, FileText, Clock, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { useClock } from '@/hooks'
+import { useAuthContext } from '@/context/AuthContext'
 
 const HomePage: React.FC = () => {
 
   const { formattedTime } = useClock({ format: 'datetime', updateInterval: 60000 })
+  const { user } = useAuthContext();
 
   // Datos de ejemplo - en producción vendrían de una API
   const stats = [
@@ -135,10 +137,10 @@ const HomePage: React.FC = () => {
       <div className="flex justify-between items-start">
         <div className="space-y-1">
           <h1 className="text-4xl font-bold tracking-tight">
-            ¡Hola! Sandra 👋🏼
+            ¡Hola! {user ? `${user.firstName}` : ''} 👋🏼
           </h1>
           <p className="text-muted-foreground text-lg">
-            Bienvenida al sistema de gestión de relaciones con clientes
+            Bienvenid@ al sistema de gestión de relaciones con clientes
           </p>
         </div>
         <div className="text-right">

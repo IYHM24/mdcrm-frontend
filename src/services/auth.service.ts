@@ -37,6 +37,7 @@ export class AuthService {
       localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.data.accessToken);
       localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken); // Example storage
       localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(response.data.user));
+      localStorage.setItem(LOCAL_STORAGE_KEYS.USER_ROLES, JSON.stringify(response.data.roles));
     }
 
     return response;
@@ -90,7 +91,13 @@ export class AuthService {
 
   async getCurrentUser(): Promise<User | null> {
     const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA);
+
     return userData ? JSON.parse(userData) : null;
+  }
+
+  async getUserRoles(): Promise<string[] | null> {
+    const rolesData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_ROLES);
+    return rolesData ? JSON.parse(rolesData) : null;
   }
 
   isAuthenticated(): boolean {

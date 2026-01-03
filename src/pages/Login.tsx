@@ -12,7 +12,7 @@ export const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { login } = useAuthContext();
+  const { login, roles, user } = useAuthContext();
 
   useEffect(() => {
     // Check if dark mode is enabled on mount
@@ -23,6 +23,14 @@ export const Login = () => {
       document.documentElement.classList.add('dark');
     }
   }, []);
+
+  useEffect(() => {
+    debugger;
+    if (user != null && roles != null) {
+      window.location.reload();
+    }
+  }, [user, roles])
+
 
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
@@ -50,21 +58,21 @@ export const Login = () => {
 
     try {
       await login(email, password);
-      window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);
     }
+
   };
 
   return (
-    <div className="w-screen h-screen lg:grid lg:grid-cols-2 shadow-lg bg-background">
+    <div className="w-screen h-screen lg:grid lg:grid-cols-2 shadow-lg dark:bg-zinc-900">
       <div className="flex items-center justify-center py-12 lg:rounded-l-2xl max-sm:rounded-2xl relative">
 
         {/* MD Logo */}
         <div className='absolute top-4 left-4 flex gap-2 items-center'>
-          <span className="text-white  font-bold text-lg  w-8 h-8 bg-brand-800  rounded-lg flex items-center justify-center">MD</span>
+          <span className="text-white  font-bold text-lg  w-8 h-8 bg-brand-800 dark:text-zinc-700 dark:bg-white  rounded-lg flex items-center justify-center">MD</span>
           <span className="text-brand-800 dark:text-white font-semibold text-xl">Sollution</span>
         </div>
         <div className="">
