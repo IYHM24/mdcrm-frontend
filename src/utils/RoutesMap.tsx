@@ -9,19 +9,22 @@ import RolesPage from "@/pages/Roles";
 import HomePage from "@/pages/Home";
 import { Login } from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
-import { LayoutDashboard, Users, Key } from "lucide-react";
+import { LayoutDashboard, Users, Key, Contact, Cog } from "lucide-react";
+import { Clientes } from "@/pages/Customers";
 
 //Configuracion de componente - Privadas
 const InformacionComponent = (params: any) => { return <InformacionPage {...params} /> }
 const UsuariosComponent = (params: any) => { return <UsuariosPage {...params} /> }
 const RolesComponent = (params: any) => { return <RolesPage {...params} /> }
+const ClientesComponent = (params: any) => { return <Clientes {...params} /> }
 const HomeComponent = (params: any) => { return <HomePage {...params} /> }
 
 //Configuracion de iconos - privadas
+const AdminIcon = (params: LucideProps) => { return <Cog {...params} /> }
 const InformacionIcon = (params: LucideProps) => { return <LayoutDashboard {...params} /> }
 const UsuariosIcon = (params: LucideProps) => { return <Users {...params} /> }
 const RolesIcon = (params: LucideProps) => { return <Key {...params} /> }
-
+const ClientesIcon = (params: LucideProps) => { return <Contact {...params} /> }
 
 //Confuiguracion de componente - Publicas
 const LoginComponent = (params: any) => { return <Login {...params} /> }
@@ -47,20 +50,34 @@ export const RoutesMap: RouteMapType[] = [
         },
     },
     {
-        module: 'usuarios',
-        icon: UsuariosIcon,
+        module: 'clientes',
+        icon: ClientesIcon,
         route: {
-            path: '/usuarios',
-            component: UsuariosComponent,
+            path: '/clientes',
+            component: ClientesComponent,
         },
     },
     {
-        module: 'roles',
-        icon: RolesIcon,
-        route: {
-            path: '/roles',
-            component: RolesComponent,
-        },
+        module: 'administracion',
+        icon: AdminIcon,
+        subroutes: [
+            {
+                module: 'usuarios',
+                icon: UsuariosIcon,
+                route: {
+                    path: '/administracion/usuarios',
+                    component: UsuariosComponent,
+                },
+            },
+            {
+                module: 'roles',
+                icon: RolesIcon,
+                route: {
+                    path: '/administracion/roles',
+                    component: RolesComponent,
+                },
+            },
+        ]
     }
 ]
 

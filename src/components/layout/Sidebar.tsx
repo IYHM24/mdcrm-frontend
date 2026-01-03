@@ -7,7 +7,7 @@ import {
   ChevronFirst,
   ChevronRight,
 } from 'lucide-react';
-import type { RouteMapType } from '@/types';
+import type { RouteMapType, SubRouteMapType } from '@/types';
 
 //
 
@@ -21,6 +21,7 @@ export const Sidebar = () => {
   const [activeRoute, setActiveRoute] = useState<string>('');
 
   useEffect(() => {
+    debugger;
     //Set initial active route based on current URL
     setActiveRoute(window.location.pathname);
   }, []);
@@ -35,11 +36,33 @@ export const Sidebar = () => {
     );
   };
 
-  const activeItem = (item: RouteMapType | undefined = undefined) => {
+  const activeItem = (item: RouteMapType | SubRouteMapType | undefined = undefined) => {
     item !== undefined ? setActiveRoute(item.route ? item.route.path : '/')
       : setActiveRoute('/');;
   }
+  // Verificar si algún submenu del módulo está activo
+  const isModuleActive = (item: RouteMapType) => {
+    // Si el módulo principal está activo
+    if (item.route && activeRoute === item.route.path) {
+      return true;
+    }
+    // Si algún submenu está activo
+    if (item.subroutes) {
+      return item.subroutes.some(subItem => activeRoute === subItem.route.path);
+    }
+    return false;
+  };
 
+  // Auto-expandir módulo si uno de sus submenus está activo
+  useEffect(() => {
+    RoutesMap.forEach(item => {
+      if (item.subroutes && item.subroutes.some(subItem => activeRoute === subItem.route.path)) {
+        setExpandedItems(prev =>
+          prev.includes(item.module) ? prev : [...prev, item.module]
+        );
+      }
+    });
+  }, [activeRoute]);
   return (
     <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-brand-900 dark:bg-zinc-800 flex flex-col h-screen overflow-hidden`}>
       {/* Header */}
@@ -78,12 +101,12 @@ export const Sidebar = () => {
               <div key={item.module}>
                 {/* Main Item */}
                 {item.route ? (
-                  <a
-                    href={item.route.path}
+                  <Link
+                    to={item.route.path}
                     onClick={() => { activeItem(item) }}
                     className={`
                       group flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative
-                      ${activeRoute === item.route.path
+                      ${isModuleActive(item)
                         ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-200 shadow-lg backdrop-blur-sm'
                         : 'text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
                       }
@@ -96,18 +119,21 @@ export const Sidebar = () => {
                     {!isCollapsed && (
                       <span className="ml-3 truncate">{item.module}</span>
                     )}
-                    {item.active && (
+                    {(item.active || isModuleActive(item)) && (
                       <div className={`${isCollapsed ? 'absolute -right-1 top-1/2 -translate-y-1/2' : 'ml-auto'}`}>
                         <div className="w-1 h-1 bg-brand-500 dark:bg-brand-400 rounded-full"></div>
                       </div>
                     )}
-                  </a>
+                  </Link>
                 ) : (
                   <button
                     onClick={() => hasSubItems && !isCollapsed && toggleExpanded(item.module)}
                     className={`
                       w-full group flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative
-                      text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50
+                      ${isModuleActive(item)
+                        ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-200 shadow-lg backdrop-blur-sm'
+                        : 'text-white/80 dark:text-brand-dark-300 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
+                      }
                     `}
                     title={isCollapsed ? item.module : ''}
                   >
@@ -131,13 +157,13 @@ export const Sidebar = () => {
                 {hasSubItems && isExpanded && !isCollapsed && (
                   <div className="mt-1 ml-8 space-y-1">
                     {item.subroutes!.map((subItem, index) => (
-                      <a
-                        onClick={() => { activeItem(item) }}
+                      <Link
+                        onClick={() => { activeItem(subItem) }}
                         key={index}
-                        href={subItem.route.path}
+                        to={subItem.route.path}
                         className={`
                           group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200
-                          ${subItem.active
+                          ${activeRoute === subItem.route.path
                             ? 'bg-white/90 dark:bg-brand-dark-700/90 text-brand-500 dark:text-brand-400 shadow-lg backdrop-blur-sm'
                             : 'text-white/70 dark:text-brand-dark-400 hover:text-white dark:hover:text-brand-dark-100 hover:bg-white/10 dark:hover:bg-brand-dark-700/50'
                           }
@@ -154,7 +180,7 @@ export const Sidebar = () => {
                             <div className="w-1 h-1 bg-brand-500 dark:bg-brand-400 rounded-full"></div>
                           </div>
                         )}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )}

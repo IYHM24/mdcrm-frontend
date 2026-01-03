@@ -3,7 +3,7 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 
-export const Customers = () => {
+export const Clientes = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
