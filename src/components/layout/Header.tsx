@@ -31,6 +31,7 @@ export const Header = () => {
 
   // Memoizar el avatar del usuario
   const userAvatar = useMemo(() => {
+
     if (!userInfo?.avatar) {
       return (
         <div className='m-3'>
@@ -38,7 +39,6 @@ export const Header = () => {
         </div>
       );
     }
-
     return (
       <div
         style={{
@@ -78,15 +78,19 @@ export const Header = () => {
 
                   {/* User icon*/}
                   <div className='flex gap-4 group'>
-                    <div className='rounded-full border-2 border-white/30 dark:border-zinc-700/50 bg-white/20 dark:bg-zinc-800/20 backdrop-blur-sm group-hover:!bg-white/30 dark:!group-hover:bg-zinc-800/30 group-hover:shadow-lg cursor-pointer'>
-                      {userAvatar}
-                    </div>
-                    <div className='flex flex-col justify-center'>
+
+                    {/* Nombre y Rol */}
+                    <div className='flex flex-col justify-center items-end pr-2 cursor-pointer'>
                       <span className="font-bold text-card-foreground text-sm">{userInfo?.firstName}</span>
                       <span className="font-light text-card-foreground text-xs">{userInfo?.rolesText}</span>
                     </div>
-                  </div>
 
+                    {/* Avatar */}
+                    <div className='rounded-full border-2 border-white/30 dark:border-zinc-700/50 bg-white/20 dark:bg-zinc-800/20 backdrop-blur-sm group-hover:!bg-white/30 dark:!group-hover:bg-zinc-800/30 group-hover:shadow-lg cursor-pointer'>
+                      {userAvatar}
+                    </div>
+
+                  </div>
 
                   {/* Dropdown menu */}
                   <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-zinc-900 backdrop-blur-md backdrop-saturate-120 rounded-md shadow-xl border border-white/30 dark:border-zinc-700/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out z-50">
@@ -139,6 +143,7 @@ export const Header = () => {
                     </div>
 
                   </div>
+
                 </div>
 
               </>

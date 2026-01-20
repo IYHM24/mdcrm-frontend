@@ -10,13 +10,13 @@ import HomePage from "@/pages/Home";
 import { Login } from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
 import { LayoutDashboard, Users, Key, Contact, Cog } from "lucide-react";
-import { Clientes } from "@/pages/Customers";
+import { Customers } from "@/pages/Customers";
 
 //Configuracion de componente - Privadas
 const InformacionComponent = (params: any) => { return <InformacionPage {...params} /> }
 const UsuariosComponent = (params: any) => { return <UsuariosPage {...params} /> }
 const RolesComponent = (params: any) => { return <RolesPage {...params} /> }
-const ClientesComponent = (params: any) => { return <Clientes {...params} /> }
+const ClientesComponent = (params: any) => { return <Customers {...params} /> }
 const HomeComponent = (params: any) => { return <HomePage {...params} /> }
 
 //Configuracion de iconos - privadas

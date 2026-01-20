@@ -21,7 +21,7 @@ export const Sidebar = () => {
   const [activeRoute, setActiveRoute] = useState<string>('');
 
   useEffect(() => {
-    debugger;
+
     //Set initial active route based on current URL
     setActiveRoute(window.location.pathname);
   }, []);

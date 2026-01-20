@@ -16,6 +16,8 @@ export const useAuth = () => {
         const currentUser = await authService.getCurrentUser();
         const currentRoles = await authService.getUserRoles();
 
+        
+
         // Actualizar refs sin causar re-renders
         userRef.current = currentUser;
         rolesRef.current = currentRoles;
@@ -40,6 +42,7 @@ export const useAuth = () => {
       const response = await authService.login({ email, password });
       if (response.status && response.data) {
         // Actualizar refs sin re-render
+        
         userRef.current = response.data.user;
         rolesRef.current = response.data.roles;
 
