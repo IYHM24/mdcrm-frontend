@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+export type { InformeModel } from "./informe.type";
 
 // Common types
 export interface User {
@@ -88,4 +89,3 @@ export interface RouteMapType {
 
 // Theme types
 export type Theme = 'light' | 'dark' | 'system';
-
