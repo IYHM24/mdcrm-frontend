@@ -8,44 +8,50 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Load user on mount
+  const loadUser = async () => {
+    try {
+      const currentUser = await authService.getCurrentUser();
+      const currentRoles = await authService.getUserRoles();
+      // Actualizar refs sin causar re-renders
+      userRef.current = currentUser;
+      rolesRef.current = currentRoles;
+      // Solo este estado causa re-render
+      setIsAuthenticated(!!userRef.current);
+    } catch (error) {
+      console.error('Error loading user:', error);
+      userRef.current = null;
+      rolesRef.current = null;
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-
-    // Load user on mount
-    const loadUser = async () => {
-      try {
-        const currentUser = await authService.getCurrentUser();
-        const currentRoles = await authService.getUserRoles();
-
-        
-
-        // Actualizar refs sin causar re-renders
-        userRef.current = currentUser;
-        rolesRef.current = currentRoles;
-
-        // Solo este estado causa re-render
-        setIsAuthenticated(!!currentUser);
-      } catch (error) {
-        console.error('Error loading user:', error);
-        userRef.current = null;
-        rolesRef.current = null;
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadUser();
+    if (
+      userRef.current !== null &&
+      rolesRef.current !== null
+    ) {
+      redirectUser();
+    }
   }, []);
+
+  /**
+   * Redirect user if authenticated
+   */
+  const redirectUser = () => {
+    window.location.href = '/';
+  }
 
   const login = useCallback(async (email: string, password: string) => {
     try {
       const response = await authService.login({ email, password });
       if (response.status && response.data) {
         // Actualizar refs sin re-render
-        
         userRef.current = response.data.user;
         rolesRef.current = response.data.roles;
-
         // Solo este estado causa re-render
         setIsAuthenticated(true);
         return response;
@@ -60,11 +66,9 @@ export const useAuth = () => {
   const logout = useCallback(async () => {
     try {
       const response = await authService.logout();
-
       // Limpiar refs sin re-render
       userRef.current = null;
       rolesRef.current = null;
-
       // Solo este estado causa re-render
       setIsAuthenticated(false);
       return response;
@@ -81,6 +85,7 @@ export const useAuth = () => {
     roles: rolesRef.current,
     login,
     logout,
+    redirectUser
   };
 
 };

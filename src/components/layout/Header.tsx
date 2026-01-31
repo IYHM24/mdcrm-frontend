@@ -8,13 +8,13 @@ import { useMemo, useCallback } from 'react';
 
 export const Header = () => {
 
-  const { user, logout, roles } = useAuthContext();
+  const { user, logout, roles, redirectUser } = useAuthContext();
   const { isDarkMode, toggleDarkMode } = useThemeContext();
 
   // Memoizar el manejo de logout para evitar re-renders
   const logoutHandle = useCallback(async () => {
     await logout();
-    window.location.reload();
+    redirectUser();
   }, [logout]);
 
   // Memoizar la información del usuario para evitar re-renders

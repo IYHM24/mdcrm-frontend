@@ -1,6 +1,8 @@
 import { API_BASE_URL, LOCAL_STORAGE_KEYS } from '@/config/constants';
 
+
 class ApiService {
+
   private baseURL: string;
 
   constructor(baseURL: string) {
@@ -12,6 +14,14 @@ class ApiService {
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
+    // No autorizado
+    if (response.status === 401) {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+      // Puedes limpiar otros datos de usuario aquí si es necesario
+      window.location.href = '/login'; // Ajusta la ruta si tu login está en otra URL
+      throw new Error('No autorizado. Redirigiendo al login...');
+    }
+    // Manejo de otros errores HTTP
     if (!response.ok) {
       const error = await response.json().catch(() => ({
         message: 'An error occurred',

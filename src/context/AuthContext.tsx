@@ -8,6 +8,7 @@ interface AuthContextType {
   roles: string[] | null;
   loading: boolean;
   isAuthenticated: boolean;
+  redirectUser: () => void;
   login: (email: string, password: string) => Promise<unknown>;
   logout: () => Promise<unknown>;
 }
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useAuthContext = () => {
-  const context = useContext(AuthContext);
+  const context: AuthContextType | undefined = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuthContext must be used within an AuthProvider');
   }

@@ -12,7 +12,7 @@ export const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { login, roles, user } = useAuthContext();
+  const { login, redirectUser } = useAuthContext();
 
   useEffect(() => {
     // Check if dark mode is enabled on mount
@@ -24,18 +24,10 @@ export const Login = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user != null && roles != null) {
-      window.location.reload();
-    }
-  }, [user, roles])
-
-
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
     localStorage.setItem('darkMode', newDarkMode.toString());
-
     if (newDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -48,21 +40,19 @@ export const Login = () => {
   // Vite-recommended way to reference files in `public/`
   const hero = new URL('/assets/Login/Background/fondo/fondo.webp', import.meta.url).href
 
-  /*  */
+  /* Submit del formulario */
   const handleSubmit = async (e: FormEvent) => {
-
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
     try {
       await login(email, password);
+      redirectUser();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);
     }
-
   };
 
   return (

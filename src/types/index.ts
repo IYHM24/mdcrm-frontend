@@ -4,13 +4,16 @@ export type { InformeModel } from "./informe.type";
 // Common types
 export interface User {
   Id: string;
+  userId: string;
+  name: string;
   firstName: string;
   lastName: string;
   documentNumber: string;
   email: string;
   isActive: boolean;
-  role: string;
+  roles: string[];
   avatar: string;
+  isAuthenticated: boolean;
 }
 
 export interface Customer {
@@ -61,8 +64,17 @@ export interface PaginationParams {
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;
+  limit: number;
+  requestedBy: User
   page: number;
   totalPages: number;
+}
+
+export interface ResponseWrapper<T> {
+  code: number;
+  data: T;
+  errMsj?: string;
+  status: boolean;
 }
 
 

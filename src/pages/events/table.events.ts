@@ -1,3 +1,4 @@
+import type { PaginationInfo } from '@/components/common';
 import type { TableEventsProps } from '@/pages/events/types';
 import type { ApiResponse, PaginatedResponse, PaginationParams } from '@/types';
 import type { useStateDefinition } from '@/types/Definitions';
@@ -7,11 +8,11 @@ class TableEvents<T> {
 
     loading: boolean;
     error: string | null;
-    pagination: { page: number; limit: number; total: number; totalPages: number; };
+    pagination: PaginationInfo;
     data: T[];
     setLoading: useStateDefinition<boolean>;
     setError: useStateDefinition<string | null>;
-    setPagination: useStateDefinition<{ page: number; limit: number; total: number; totalPages: number; }>;
+    setPagination: useStateDefinition<PaginationInfo>;
     setData: useStateDefinition<T[]>;
     request_data?: (params?: PaginationParams) => Promise<PaginatedResponse<T>>;
 
@@ -69,14 +70,13 @@ class TableEvents<T> {
                 this.setError('No request_data configured');
                 return [];
             }
-            const response = await fetcher({ page, limit });
-
+            const response: PaginatedResponse<T> = await fetcher({ page, limit });
             //2. Establecer paginación
             this.setPagination({
                 page: response.page || page,
                 limit: limit,
                 total: response.total || 0,
-                totalPages: response.totalPages || 0,
+                totalPages: response.total || 0,
             });
             //3. Establecer datos
             this.setData(response.data || []);

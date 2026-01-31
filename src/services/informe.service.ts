@@ -1,5 +1,5 @@
 import { apiService } from './api.service';
-import type { InformeModel, ApiResponse, PaginatedResponse, PaginationParams } from '@/types';
+import type { InformeModel, ApiResponse, PaginatedResponse, PaginationParams, ResponseWrapper } from '@/types';
 
 class InformeService {
 
@@ -11,15 +11,17 @@ class InformeService {
      * @returns 
      */
     async getAll(params?: PaginationParams): Promise<PaginatedResponse<InformeModel>> {
-        debugger;
         const queryParams = params
             ? {
                 page: String(params.page),
                 limit: String(params.limit),
             }
             : undefined;
-        const response = await apiService.get<PaginatedResponse<InformeModel>>(this.endpoint, queryParams);
-        return response;
+
+        const response: ResponseWrapper<PaginatedResponse<InformeModel>> =
+            await apiService.get<ResponseWrapper<PaginatedResponse<InformeModel>>>(this.endpoint, queryParams);
+
+        return response.data;
     }
 
     /**

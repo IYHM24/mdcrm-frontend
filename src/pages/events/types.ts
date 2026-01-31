@@ -1,3 +1,4 @@
+import type { PaginationInfo } from "@/components/common";
 import type { PaginatedResponse, PaginationParams } from "@/types";
 import type { useStateDefinition } from "@/types/Definitions";
 
@@ -6,8 +7,8 @@ export type TableEventsProps = {
     setLoading: useStateDefinition<boolean>;
     error: string | null;
     setError: useStateDefinition<string | null>;
-    pagination: { page: number; limit: number; total: number; totalPages: number; };
-    setPagination: useStateDefinition<{ page: number; limit: number; total: number; totalPages: number; }>;
+    pagination: PaginationInfo;
+    setPagination: useStateDefinition<PaginationInfo>;
     data: any[];
     setData: useStateDefinition<any[]>;
     request_data: (params?: PaginationParams) => Promise<PaginatedResponse<any>>

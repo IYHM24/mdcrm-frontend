@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import { TableComponent, type ColumnDef, type TableAction, type PaginationInfo } from './TableComponent';
-import { informeService } from '@/services/informe.service';
+import informeService from '@/services/informe.service';
 import type { InformeModel } from '@/types';
 import { FileText, Plus, Trash2, Download } from 'lucide-react';
 
